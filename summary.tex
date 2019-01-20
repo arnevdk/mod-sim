@@ -74,6 +74,8 @@
 	Om een Givens-rotatie op te stellen die plaats $(j,k)$ $0$ maakt in matrix $A$, kies dan een element in dezelfde kolom (bv. het element boven $(j,k)$) op oplaats $(i,k)$ en maak $G_{ij}$ met
 	$$ c = \frac{a_{ik}}{\sqrt{a_{ik}^2 + a_{jk}^2}} \text{ en } s = \frac{a_{jk}}{\sqrt{a_{ik}^2 + a_{jk}^2}}$$
 	
+	\pagebreak
+	
 	\begin{algorithm}[!ht]
 		\caption{Givens-rotatie-algoritme}
 		\begin{algorithmic}[1]
@@ -126,8 +128,75 @@
 		\end{algorithmic}
 	\end{algorithm}
 
-	\pagebreak
+	\textbf{Complexiteit:} $\mathcal{O}(3mn^2 - n^3)$ \\
+	\textbf{Stabiliteit:} stabiel
+
+
 	
 	\subsubsection{QR-factorisatie met kolompivotering}
+	Indien $A$ niet van volle rang is, is het voor de stabiliteit beter om kolompivotering toe te passen. In stap $j$ van het QR-algoritme met Givens-rotaties verwisselen we kolom $j$ met de kolom $p$ waarvan de 2-norm het grootst is.\\
+		
+	\textbf{Complexiteit:} $\mathcal{O}(3mn^2 - n^3)$ \\
+	\textbf{Stabiliteit:} stabieler voor rang-deficiënte matrices
+	
+	
+	\subsection{Kleinste-Kwadratenbenadering}
+	Om de coëfficiënten te bepalen wordt een Vandermondematrix $A$ opgesteld. 
+	De te minimaliseren fout bij KK-benadering wordt gegeven door
+	$$
+	\min_{x \in \mathbb{R}^n} \norm{b-Ax}_2 
+	= \min_{x \in \mathbb{R}^n} \sqrt{\sum_{i=1}^{m}(b_i - \sum_{j=1}^{n}a_{i,j}x_j)^2}
+	$$
+	met $r=b-Ax$ de \textit{residuvector}.
+	
+	Dit probleem kan opgelost worden door $x$ te bepalen in 
+	$$
+	A^TAx = A^Tb
+	$$
+	De Vandermondematrix $A$ is slecht geconditioneerd. We zoeken dus andere manieren om het KK-probleem op te lossen.\\
+	
+	\subsubsection{Oplossing met QR-ontbinding}
+	
+	Indien de QR-factorisatie van $A$ bekend is, kan deze gebruikt worden om een oplossing voor het KK-probleem te vinden:
+	$$
+	\min_{x \in \mathbb{R}^n} \norm{b-Ax}_2  
+	= \min_{x \in \mathbb{R}^n} \norm{b-QRx}_2
+	= \min_{x \in \mathbb{R}^n} \norm{Q^Tb-RAx}_2 
+	$$
+	Aangezien vermenigvuldiging vooraan met een orthogonale matrix de norm behoudt. \\	
+	De  vector $Q^Tb=c$ kan opgesplitst worden in  de volgende componenten:
+	$
+	\begin{bmatrix}
+		c_1\\
+		c_2
+	\end{bmatrix}
+	$
+	met $c_1 \in \mathbb{R}^n$ en $c_2 \in \mathbb{R}^{m-n}$\\
+	Hieruit volgt:
+	$$
+	\min_{x \in \mathbb{R}^n} \norm{b-Ax}_2 
+	= 	\min_{x \in \mathbb{R}^n} \norm{
+		\begin{bmatrix}
+		c_1\\
+		c_2
+		\end{bmatrix}
+		-
+		\begin{bmatrix}
+			\hat{R}\\
+			0
+		\end{bmatrix}
+		x}_2 
+	$$
+	Volgens de stelling van Pythagoras geldt:
+	$$
+	\min_{x \in \mathbb{R}^n} \norm{b-Ax}_2^2
+	= \min_{x \in \mathbb{R}^n} (\norm{c_1-\hat{R}x}_2^2 + \norm{c_2}_2^2)
+	$$
+	De vector $x$ met coëfficiënten met minimale fout kan dus ook bekomen worden als $x$ de oplossing van $\hat{R}x = c_1$\\
+	
+	\textbf{Complexiteit:} $\mathcal{O}(mn) + \mathcal{O}n^2$ indien QR-factorisatie bekend\\
+	\textbf{Stabiliteit:} stabiel indien $A$ van volle rang
+	
+	
 	
 \end{document}
