@@ -139,6 +139,47 @@
 	\textbf{Complexiteit:} $\mathcal{O}(3mn^2 - n^3)$ \\
 	\textbf{Stabiliteit:} stabieler voor rang-deficiënte matrices
 	
+	\subsection{Singuliere-waardenontbinding}
+	
+	\begin{mydef}
+		De singuliere-waardenontbinding van matrix $A$ wordt gegeven door
+		$$
+		A = \hat{U}\hat{\Sigma}V^T
+		$$
+		waarbij $\hat{U}$ orthonormale kolommen heeft, $\hat{\Sigma}$ een diagonaalmatrix met de singuliere waarden is en $V$ een orthogonale matrix is.
+	\end{mydef}
+
+	Eigenschappen van de SVD:
+	\begin{itemize}
+		\item De rang van $A$ is gelijk aan de rang van $\Sigma$ is gelijk aan het aantal niet-nul singuliere waarden.
+		\item De eerste $r$ kolommen van $U$ vormen een basis voor de kolomruimte van $A$.
+		\item De laatste $n-r$ kolommen van $V$ vormen een basis voor de nulruimte van $A$.
+		\item $ A = U \Sigma V^T = \sum_{i=1}^{r} \sigma_i u_i v_i^T $
+		\item $ norm{A}_2 = \sqrt(\sigma_1^2 + \sigma_2^2 + ... + \sigma_r^2) $
+		\item De singuliere waarden zijn de vierkantswortels van de eigenwaarden van $A^TA$. De kolommen van $V$ zijn de bijhorende eigenvectoren.
+		\item De singuliere waarden zijn de vierkantswortels van de $n$ grootste eigenwaarden van $AA^T$. De eerste $n$ kolommen van $U$ zijn de bijhorende eigenvectoren.
+		\item Als $A$ symmetrisch is, zijn de singuliere waarden de absolute waarden van de eigenwaarden van $A$.
+	\end{itemize}
+
+	\subsubsection{Lage rangbenadering}
+	
+	\begin{mydef}
+		De $\epsilon$-rang van een matrix $A$ wordt gedefinieerd als
+		$$
+			rang(A,\epsilon) = \min_{\norm{A-B}_2 \leq \epsilon} \text{rang}(B)
+		$$
+	\end{mydef}
+	De matrix $B$ ligt $\epsilon$-dicht bij $A$ als hij een rang heeft die de kleinste is onder alle matrices die $\epsilon$-dicht bij $A$ liggen.
+	
+	\begin{mydef}
+		Een rang k-benadering $A_k$ met $(k \leq r)$ van $A$ wordt berekend door de singuliere waardenontbinding te vermenigvuldigen, maar $\Sigma$ te vervangen door een diagonaalmatrix met de $k$ grootste singuliere waarden op de diagonaal.
+	\end{mydef}
+
+	Hierdoor geldt de eigenschap
+	$$
+		\norm{A-A_k}_2 = min_{B \in \mathbb{R}^{m \times m} \text{rang}(B) \leq k} \norm{A-B}_2 = \sigma_k+1
+	$$
+	
 	
 	\subsection{Kleinste-Kwadratenbenadering}
 	Om de coëfficiënten te bepalen wordt een Vandermondematrix $A$ opgesteld. 
@@ -194,9 +235,50 @@
 	$$
 	De vector $x$ met coëfficiënten met minimale fout kan dus ook bekomen worden als $x$ de oplossing van $\hat{R}x = c_1$\\
 	
-	\textbf{Complexiteit:} $\mathcal{O}(mn) + \mathcal{O}n^2$ indien QR-factorisatie bekend\\
-	\textbf{Stabiliteit:} stabiel indien $A$ van volle rang
+	\textbf{Complexiteit:} $\mathcal{O}(mn) + \mathcal{O}n^2$ indien QR-factorisatie bekend.\\
+	\textbf{Stabiliteit:} stabiel indien $A$ van volle rang.
 	
+
+	\subsection{Eigenwaardenproblemen}
+	
+	\subsubsection{Methode van de machten}
+	Deze methode vindt de eigenvector bij de grootste eigenwaarde en is geschikt voor ijle matrices.
+	
+		\begin{algorithm}[!ht]
+		\caption{Methode der machten}
+		\begin{algorithmic}[1]
+			\Procedure{EigenPowermethod}{}
+				\State $q_0 random$
+				\For{$k=0,1,2,...$}
+					\State take $\gamma_k$ such that $\norm{q_{k+1}}_2 = 1$
+					\State $q_{k+1} = \frac{Aq_k}{\gamma_k} $
+				\EndFor
+			\EndProcedure
+		\end{algorithmic}
+	\end{algorithm}
+
+	$q_k$ zal convergeren naar $\gamma_1 x_1$
+	
+	\textbf{Voordelen:}
+	\begin{itemize}
+		\item Lineaire convergentie
+		\item Eenvoudige berekeningen
+		\item zeer efficiënt voor ijle matrices
+	\end{itemize}
+	\textbf{Nadelen:}
+	\begin{itemize}
+		\item Zeer trage convergentie als $\lambda_1$ niet sterk dominant is.
+	\end{itemize}
+		
+	\subsubsection{Deelruimte-iteratie}
+	
+	We itereren nu niet meer op één vector (methode der machten) maar op de volledige ruimte opgespannen door een orthonormaal stel vectoren.
+	
+	\subsubsection{QR-algoritme zonder shift}
+	
+	\subsubsection{Omvorming tot Hessenbergmatrix}
+	
+	\subsubsection{QR-algoritme met shift}
 	
 	
 \end{document}
