@@ -1,0 +1,133 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[dutch]{babel}
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{bbold}
+
+\title{Samenvatting [G0Q57A] - Modellering en simulatie}
+\author{Arne Van Den Kerchove}
+
+\newtheorem{mydef}{Definitie}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\setlength\parindent{0pt}
+
+\begin{document}
+	\maketitle
+	
+	\tableofcontents
+	
+	\pagebreak
+	
+	\section{Modellen en simulaties}
+	\section{Numerieke lineaire algebra en toepassingen}
+	\subsection{QR-factorisatie}
+	
+	
+	\begin{mydef}
+		De volle QR-factorisatie van de matrix $A$ wordt gegeven door
+		$$	A=QR  $$
+		met $q$ een $m \times m$ orthogonale matrix en $R$ een $m \times n $ bovendriehoeksmatrix.
+	\end{mydef}
+
+	\subsubsection{Gram-Schmidt orthogonalisatie}
+	
+
+	\begin{algorithm}[!ht]
+		\caption{Gram-Schmidt-algoritme}
+		\begin{algorithmic}[1]
+			\Procedure{QRGramSchmidt}{}
+				\For{$j=1$ to $n$}
+					\State $v_j = a_j$
+					\For{$i=1$ to $j-1$}
+						\State $r_{ij} = q_i^T a_j$
+						\State $v_j = v_j - r_{ij} q_i$
+					\EndFor
+					\State $r_{jj} = \norm{v_j}_2$
+					\State $q_j = v_j/r_{jj}$
+				\EndFor 
+			\EndProcedure
+		\end{algorithmic}
+	\end{algorithm}
+
+	\textbf{Complexiteit:} $\mathcal{O}(2mn^2)$\\
+	\textbf{Stabiliteit:} niet stabiel
+	
+	\subsubsection{QR-factorisatie met Givens-rotaties}
+	
+	\begin{mydef}
+		Een Givens-rotatie is een $m \times m$ orthogonale matrix van de vorm
+		$$
+		G_{ij} = 
+		\begin{bmatrix}
+			c & -s \\
+			s &  c  
+		\end{bmatrix}
+		$$
+		met
+		$$ c^2 + s^2 = 1 $$
+	\end{mydef}
+
+	Om een Givens-rotatie op te stellen die plaats $(j,k)$ $0$ maakt in matrix $A$, kies dan een element in dezelfde kolom (bv. het element boven $(j,k)$) op oplaats $(i,k)$ en maak $G_{ij}$ met
+	$$ c = \frac{a_{ik}}{\sqrt{a_{ik}^2 + a_{jk}^2}} \text{ en } s = \frac{a_{jk}}{\sqrt{a_{ik}^2 + a_{jk}^2}}$$
+	
+	\begin{algorithm}[!ht]
+		\caption{Givens-rotatie-algoritme}
+		\begin{algorithmic}[1]
+			\Procedure{QRGivens}{}
+				\State $Q=\mathbb{1}$
+				\State $R=A$
+				\For{$j=1$ to $n$}
+					\For{$i=m$ to $j+1$}
+						\State $c = \frac{r_{i-1,j}}{\sqrt{r_{i-1,j}^2 + r_{i,j}^2}}$
+						\State $s = \frac{r_{i,j}}{\sqrt{r_{i-1,j}^2 + r_{i,j}^2}}$
+						\State $r_{i,j} = 0$
+						\State $r_{i-1,j} = \sqrt{r_{i-1,j}^2 + r_{i,j}^2}$
+						\For{$k=j+1$ to $n$}
+							\State 
+							$$
+								\begin{bmatrix}
+									r_{i-1,k} \\
+									r_{ik}
+								\end{bmatrix}
+								=
+								\begin{bmatrix}
+									c & s \\
+									-s & s
+								\end{bmatrix}
+								\begin{bmatrix}
+									r_{i-1,k} \\
+									r_{i,k}
+								\end{bmatrix}
+							$$
+						\EndFor
+						\For{$k=1$ to $m$}
+							\State
+							$$
+								\begin{bmatrix}
+									q_{k,i-1} & q_{ki}
+								\end{bmatrix}
+								=
+								\begin{bmatrix}
+									q_{k,i-1} & q_{ki}
+								\end{bmatrix}
+								\begin{bmatrix}
+									c & s \\
+									-s & s
+								\end{bmatrix}
+							$$
+						\EndFor
+					\EndFor
+				\EndFor
+			\EndProcedure
+		\end{algorithmic}
+	\end{algorithm}
+
+	\pagebreak
+	
+	\subsubsection{QR-factorisatie met kolompivotering}
+	
+\end{document}
