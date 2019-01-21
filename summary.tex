@@ -5,6 +5,7 @@
 \usepackage{algorithm}
 \usepackage[noend]{algpseudocode}
 \usepackage{bbold}
+\usepackage{todonotes}
 
 \title{Samenvatting [G0Q57A] - Modellering en simulatie}
 \author{Arne Van Den Kerchove}
@@ -23,6 +24,9 @@
 	\pagebreak
 	
 	\section{Modellen en simulaties}
+	
+	\todo{Dit hoofdstuk als er tijd over is}
+	
 	\section{Numerieke lineaire algebra en toepassingen}
 	\subsection{QR-factorisatie}
 	
@@ -244,11 +248,11 @@
 	\subsubsection{Methode van de machten}
 	Deze methode vindt de eigenvector bij de grootste eigenwaarde en is geschikt voor ijle matrices.
 	
-		\begin{algorithm}[!ht]
+	\begin{algorithm}[!ht]
 		\caption{Methode der machten}
 		\begin{algorithmic}[1]
 			\Procedure{EigenPowermethod}{}
-				\State $q_0 random$
+				\State $q_0$ random
 				\For{$k=0,1,2,...$}
 					\State take $\gamma_k$ such that $\norm{q_{k+1}}_2 = 1$
 					\State $q_{k+1} = \frac{Aq_k}{\gamma_k} $
@@ -261,7 +265,6 @@
 	
 	\textbf{Voordelen:}
 	\begin{itemize}
-		\item Lineaire convergentie
 		\item Eenvoudige berekeningen
 		\item zeer efficiënt voor ijle matrices
 	\end{itemize}
@@ -269,16 +272,94 @@
 	\begin{itemize}
 		\item Zeer trage convergentie als $\lambda_1$ niet sterk dominant is.
 	\end{itemize}
+
+	\textbf{Convergentie:} lineair, afhankelijk van afstand tussen grootste eigenwaarden.
 		
 	\subsubsection{Deelruimte-iteratie}
 	
-	We itereren nu niet meer op één vector (methode der machten) maar op de volledige ruimte opgespannen door een orthonormaal stel vectoren.
+	We itereren nu niet meer op één vector (methode der machten) maar op de volledige ruimte opgespannen door een orthonormaal stel vectoren.\\
+	
+	Voor $n$ eigenwaarden:
+	
+	\begin{algorithm}[!ht]
+		\caption{Deelruimte-iteratie}
+		\begin{algorithmic}[1]
+			\Procedure{EigenPartialSpace}{}
+				\State $\hat{Q}_0 = 
+				\begin{bmatrix}
+					q_1^0 & q_2^0 & ... & q_n^0
+				\end{bmatrix}
+				$ random orthonormaal
+				\For{$k=0,1,2,...$}
+					\State $\hat{P}_k = A\hat{Q}_{k-1}$
+					\State $\hat{Q}_k \hat{R}_k = \hat{P}_k$ door QR-factorisatie
+				\EndFor
+			\EndProcedure
+		\end{algorithmic}
+	\end{algorithm}
+
+	\textbf{Convergentie:} lineair, afhankelijk van afstand tussen eigenwaarden.
 	
 	\subsubsection{QR-algoritme zonder shift}
 	
+	\begin{algorithm}[!ht]
+		\caption{QR-algoritme zonder shift}
+		\begin{algorithmic}[1]
+			\Procedure{EigenQR}{}
+			\For{$k=1,2,3...$}
+				\State $A_k = Q_k R_k$ door QR-factorisatie
+				\State $A_{k+1} = R_k Q_k$
+			\EndFor
+			\EndProcedure
+		\end{algorithmic}
+	\end{algorithm}
+
+	$\tilde{Q}_k = 
+	\begin{bmatrix}
+		\tilde{q}_1^{(k)} & \tilde{q}_2^{(k)} & ... & \tilde{q}_i^{(k)}
+	\end{bmatrix}$ convergeert naar de eigenvctoren van $A$.\\
+	
+	
+	\textbf{Complexiteit:} $\mathcal{O}(km^3)$
+	
 	\subsubsection{Omvorming tot Hessenbergmatrix}
+	
+	Het aantal stappen in het QR-algoritme kan teruggebracht worden door eerst de matrix om te vormen naar een \textit{Hessenbergvorm} m.b.v. Givens-rotaties.\\
+		
+	\textbf{Complexiteit van omvorming:} $\mathcal{O}(m^3)$
 	
 	\subsubsection{QR-algoritme met shift}
 	
+	De convergentie van het QR-algoritme kan versneld worden door een \textit{shift} toe te passen.
+	
+	\pagebreak
+	
+	\begin{algorithm}[!ht]
+		\caption{QR-algoritme met shift}
+		\begin{algorithmic}[1]
+			\Procedure{EigenQRShift}{}
+				\State $A=A_0$ Hessenberg
+				\For{$k=1,2,3...$}
+					\State $\kappa = a_{m,m}^{(k)}$
+					\State $A_k - \kappa \mathbb{1} = Q_k R_k$ door QR-factorisatie
+					\State $A_{k+1} = R_k Q_k + \kappa \mathbb{1}$
+				\EndFor
+			\EndProcedure
+		\end{algorithmic}
+	\end{algorithm}	
+	$\tilde{Q}_k = 
+	\begin{bmatrix}
+	\tilde{q}_1^{(k)} & \tilde{q}_2^{(k)} & ... & \tilde{q}_i^{(k)}
+	\end{bmatrix}$ convergeert naar de eigenvctoren van $A$.\\
+	
+	
+	\textbf{Complexiteit:} $\mathcal{O}(km^3)$ \\
+	\textbf{Convergentie:} kubisch indien symmetrisch, anders lineair, afhankelijk van afstand tussen eigenwaarden.
+	
+	\subsection{Toepassingen in de grafentheorie}
+	
+	\subsubsection{PageRank}
+	
+	\subsubsection{Meest centrale knoop}
 	
 \end{document}
