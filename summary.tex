@@ -21,7 +21,9 @@
 	
 	\tableofcontents
 	
-	\pagebreak
+	\pagebreak	
+	
+	\todo{Antwoorden op examnevragen opnemen}
 	
 	\section{Modellen en simulaties}
 	
@@ -350,7 +352,7 @@
 	$\tilde{Q}_k = 
 	\begin{bmatrix}
 	\tilde{q}_1^{(k)} & \tilde{q}_2^{(k)} & ... & \tilde{q}_i^{(k)}
-	\end{bmatrix}$ convergeert naar de eigenvctoren van $A$.\\
+	\end{bmatrix}$ convergeert naar de eigenvectoren van $A$.\\
 	
 	
 	\textbf{Complexiteit:} $\mathcal{O}(km^3)$ \\
@@ -368,7 +370,7 @@
 	\begin{enumerate}
 		\item als veel andere pagina's naar $P_i$ verwijzen, begunstigd dit $r(P_i)$
 		\item als $r(P_i)$ hoog is, begunstigd dit de score van pagina's waarnaar $P_i$ verwijst.
-		\item als $P_i$ weinig links heeft is dit beginstigend voor de pagina's waarnaar $P_i$ verwijst.
+		\item als $P_i$ weinig links heeft is dit begunstigend voor de pagina's waarnaar $P_i$ verwijst.
 	\end{enumerate}
 
 	Vervolgens wordt $A$ omgevormd tot een \textit{irreduceerbare} en \textit{rij-stochastische} matrix $\hat{A}$. Volgens deze eigenschappen heeft $\hat{A}$ $1$ als grootste eigenwaarde en kan de \textit{PageRank}-vector met scores dus gevonden worden door het volgende stelsel op te lossen:
@@ -397,6 +399,136 @@
 	$$
 	
 	\section{Optimalisatie}
+	
+		\begin{mydef}
+		De gradiënt van een functie $f: \mathbb{R}^n \to \mathbb{R}$ wordt gedefinieerd als
+		$$
+		\mathcal{r} f(x) :=
+		\begin{bmatrix}
+		\frac{\partial f(x)}{\partial x_1} & ... & \frac{\partial f(x)}{\partial x_n}
+		\end{bmatrix}^T
+		$$
+	\end{mydef}
+	
+	\begin{mydef}
+		De Hessiaan van een functie $f: \mathbb{R}^n \to \mathbb{R}$ wordt gedefinieerd als
+		$$
+		\mathcal{r}^2 f(x) :=
+		\begin{bmatrix}
+		\frac{\partial^2 f(x)}{\partial x_i \partial x_j}
+		\end{bmatrix}_{i,j=1}^n
+		\in \mathbb{R}^{n\times n}
+		$$
+	\end{mydef}
+	
+	\begin{mydef}
+		De Jacobiaan van een functie $K: \mathbb{R}^n \to \mathbb{R}^m$ wordt gedefinieerd als
+		$$
+		J_Kf(x) :=
+		\begin{bmatrix}
+		\frac{\partial k_i (x_1 ..., x_n)}{\partial x_j}
+		\end{bmatrix}_{i,j=1}^n
+		\in \mathbb{R}^{n\times n}
+		$$
+	\end{mydef}
+	
+	De Hessiaan van $f(x)$ is de Jacobiaan van haar gradiënt $\mathcal(r) f(x)$
+	
+	\subsection{Optimalisatieproblemen zonder beperkingen}
+	
+	De helling in de richting van de gradiënt is het grootst.
+	
+	\subsubsection{Algemene afdalingsmethode}
+	
+	Een iteratie van afdalingsmethode om een minimum van een functie $f$ te vinden begint met het vinden van een volgend iteratiepunt $x^(k)$. Dit gebeurt in twee stappen:
+	\begin{enumerate}
+		\item Bereken een \textit{trial}-stap $h^{(k)}$ waarvoor $[h^{(k)}]^T f(x^{(k)}) < 0$
+		\item Zoek de stapgrootte $\alpha^{(k)} > 0$ zodat $x^{(k+1)} = x^{(k)} + \alpha^{(k)} h^{(k)}$ een lagere functiewaarde geeft dan $f(x^{(k)})$
+	\end{enumerate}
+
+	\todo{algoritme}
+
+	In veel methodes neemt $\alpha$ af naarmate het minimum nadert.	
+	
+	\subsubsection{Methode van de steilste afdaling}
+	
+	De richting waarin $f$ het snelst daalt wordt bepaald door 
+	$$
+		h^{(k)} = -\nabla f(x^{(k)})
+	$$
+	
+	Dit zorgt voor inefficiëntie door een zig-zagverloop omdat $\alpha^{(k)}$ vaak te groot is.	
+	
+	\subsubsection{Methode van Newton}
+	
+	De afdaalrichting $h^{(k)}$ wordt bepaald door $f(x)$ in de omgeving van $x^{(k)}$ door een \textit{kwadriek}:
+	$$
+		f(x^{(k)} + h) \approx q(h) := f(x^{(k)}) + h^T \nabla f(x^{(k)}) + \frac{1}{2} h^T \nabla^2 f(x^{(k)})h
+	$$
+	Deze benaderende functie heeft in punt $x^{(k)}$ dezelfde gradiënt (raakvlak) en dezelfde Hessiaan (kromming) als $f(x)$.
+	
+	De richting naar het nieuwe iteratiepunt is het minimum van deze kwadriek, berekend door $ \nabla q(h) = 0 $:
+	$$
+		h^{(k)} = -[\nabla^2f(x^{(k)})]^{-1} \nabla f(x^{(k)})
+	$$
+	
+	\textbf{Convergentie:} Kwadratisch indien Hessiaan singulier en startwaarde in attractiegebied van minimum.
+	
+	\todo{waarom beter dan methode van de steilste afdaling}
+	
+	\subsection{Optimalisatieproblemen met beperkingen}
+	
+	\subsubsection{Gelijkheidsbeperkingen}
+	
+	Het probleem is dat de gradiënt van doelfunctie $f(x)$ en beperking $g(x)$ niet in dezelfde richting liggen.\\
+	
+	\todo{TODO}
+	
+	\subsubsection{Ongelijkheidsbeperkingen}
+	
+	\todo{TODO}
+	
+	\section{Trigoniometrische benadering}
+	
+	\subsection{Fourier-analyse}
+	Een Fourier-transformatie stelt een functie, die origineel in het tijdsdomein werd voorgesteld, voor in het frequentiedomein. Afhankelijk van de situatie onderscheiden we de volgende Fourier-transformaties:
+		\begin{enumerate}
+			\item \textbf{Continue Fourier-transformatie} wanneer $x(t)$ gedefinieerd voor $t \in (-\infty, \infty)$.
+			\item \textbf{Fourier-reeksontwikkeling} wanneer $x(t)$ gedefinieerd is op een compact interval $[a, b]$.
+			\item \textbf{Discrete Fourier-transformatie} wanneer $x(t)$ bemonsterd op een eindig aantal equidistante tijdstippen.
+			\item \textbf{Z-transformatie} wanneer $x(t)$ bemonsterd op een oneindig aantal equidistante tijdstippen.
+		\end{enumerate}	
+	
+	\subsection{Discrete Fourier-transformatie}
+	
+	\subsubsection{Discrete Fourier-transformatie en inverse discrete Fourier-transformatie}
+	
+	\begin{mydef}
+		Voor een eindige rij $\{x_n\}_{n=0}^{N-1}$ met $N$ willekeurige getallen wordt de discrete Fourier-transformatie gegeven door
+		$$
+			X_k = \sum_{n=0}^{N-1} x_n W_N^{kn}  
+		$$
+		voor $k=0, ... , N-1$ met
+		$$
+			W_N = e^{2\pi i/N}
+		$$
+	\end{mydef}
+
+	\begin{mydef}
+		Voor een eindige rij $\{X_k\}_{k=0}^{N-1}$ met $N$ willekeurige getallen wordt de inverse discrete Fourier-transformatie gegeven door
+		$$
+		x_n = \sum_{k=0}^{N-1} X_k W_N^{-kn}  
+		$$
+		voor $n=0, ... , N-1$ met
+		$$
+		W_N = e^{2\pi i/N}
+		$$
+	\end{mydef}
+	
+	\subsection{Symmetrische discrete Fourier-transformaties}
+	
+	\subsection{Meerdimensionele Fourier-transformatie}
+	
 	
 	
 	
