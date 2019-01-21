@@ -75,7 +75,7 @@
 		$$ c^2 + s^2 = 1 $$
 	\end{mydef}
 
-	Om een Givens-rotatie op te stellen die plaats $(j,k)$ $0$ maakt in matrix $A$, kies dan een element in dezelfde kolom (bv. het element boven $(j,k)$) op oplaats $(i,k)$ en maak $G_{ij}$ met
+	Om een Givens-rotatie op te stellen die plaats $(j,k)$ $0$ maakt in matrix $A$, kies dan een element in dezelfde kolom (bv. het element boven $(j,k)$) op plaats $(i,k)$ en maak $G_{ij}$ met
 	$$ c = \frac{a_{ik}}{\sqrt{a_{ik}^2 + a_{jk}^2}} \text{ en } s = \frac{a_{jk}}{\sqrt{a_{ik}^2 + a_{jk}^2}}$$
 	
 	\pagebreak
@@ -252,7 +252,7 @@
 		\caption{Methode der machten}
 		\begin{algorithmic}[1]
 			\Procedure{EigenPowermethod}{}
-				\State $q_0$ random
+				\State $q_1$ random
 				\For{$k=0,1,2,...$}
 					\State take $\gamma_k$ such that $\norm{q_{k+1}}_2 = 1$
 					\State $q_{k+1} = \frac{Aq_k}{\gamma_k} $
@@ -360,6 +360,44 @@
 	
 	\subsubsection{PageRank}
 	
+	Stel een grafe op van alle links op webpagina's naar andere webpagina's. Het gewicht van de edges wordt genormaliseerd met het aantal links op de pagina die verwijst. Stel deze grafe voor als matrix $A$\\
+	
+	$A$ geeft ook een Markov-model voor het web.\\
+	
+	Gebaseerd op de matrix $A$ wordt aan elke pagina $P_i$ een score $r(P_i) \geq 0$ toegekend via de volgende principes:
+	\begin{enumerate}
+		\item als veel andere pagina's naar $P_i$ verwijzen, begunstigd dit $r(P_i)$
+		\item als $r(P_i)$ hoog is, begunstigd dit de score van pagina's waarnaar $P_i$ verwijst.
+		\item als $P_i$ weinig links heeft is dit beginstigend voor de pagina's waarnaar $P_i$ verwijst.
+	\end{enumerate}
+
+	Vervolgens wordt $A$ omgevormd tot een \textit{irreduceerbare} en \textit{rij-stochastische} matrix $\hat{A}$. Volgens deze eigenschappen heeft $\hat{A}$ $1$ als grootste eigenwaarde en kan de \textit{PageRank}-vector met scores dus gevonden worden door het volgende stelsel op te lossen:
+	$$ \hat{A}^T \Pi = 1 \Pi $$
+	wat neer komt op het bepalen van de eigenvector van $\hat{A}$ horende bij de dominante eigenwaarde 1.
+	
 	\subsubsection{Meest centrale knoop}
+	
+	Centraliteit van een knoop kan gemeten worden door het aantal verbindingen of lussen. Het aantal lussen van lengte $n$ vertrekkende uit knoop $i$ is $(A^n)_{i,i}$. Voor de definitie van de meest centrale knoop moeten lussen van elke lengte worden meegeteld, maar hoe groter de lengte, hoe minder gewicht er gegeven moet worden aan die lus.\\
+	
+	\begin{mydef}
+		
+		De centraliteit van een knoop $i$ in matrix $A$ wordt gegeven door $(e^A)_{i,i}$ met $e^A$ de matrix-exponentiële van matrix $A$, die berekend wordt als
+		$$
+		\mathbb{1} + \frac{A}{1!} + \frac{A^2}{2!} + ... + \frac{A^n}{n!} + ...
+		$$
+	\end{mydef}
+	
+	Indien de eigenwaardenontbinding van $A$ bekend is als
+	$$
+	 A = X diag(\lambda_1, ... , \lambda_N) X^{-1}
+	$$
+	kan de matrix-exponentiële berekend worden als
+	$$
+		e^A = X diag(e^{\lambda_1}, ... , e^{\lambda_N}) X^{-1}
+	$$
+	
+	\section{Optimalisatie}
+	
+	
 	
 \end{document}
