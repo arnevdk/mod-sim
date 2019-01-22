@@ -8,8 +8,11 @@
 \usepackage{todonotes}
 \usepackage{systeme}
 
-\title{Samenvatting [G0Q57A] - Modellering en simulatie}
-\author{Arne Van Den Kerchove}
+\title{
+	G0Q57A: Modellering en simulatie\\
+	Samenvatting
+}
+\author{Arne Van Den Kerchove - \texttt{arne@vandenkerchove.com}}
 
 \newtheorem{mydef}{Definitie}
 
@@ -19,6 +22,8 @@
 
 \begin{document}
 	\maketitle
+	
+	\pagebreak
 	
 	\tableofcontents
 	
@@ -81,8 +86,6 @@
 
 	Om een Givens-rotatie op te stellen die plaats $(j,k)$ $0$ maakt in matrix $A$, kies dan een element in dezelfde kolom (bv. het element boven $(j,k)$) op plaats $(i,k)$ en maak $G_{ij}$ met
 	$$ c = \frac{a_{ik}}{\sqrt{a_{ik}^2 + a_{jk}^2}} \text{ en } s = \frac{a_{jk}}{\sqrt{a_{ik}^2 + a_{jk}^2}}$$
-	
-	\pagebreak
 	
 	\begin{algorithm}[!ht]
 		\caption{Givens-rotatie-algoritme}
@@ -338,7 +341,7 @@
 	
 	De convergentie van het QR-algoritme kan versneld worden door een \textit{shift} toe te passen.
 	
-	\pagebreak
+
 	
 	\begin{algorithm}[!ht]
 		\caption{QR-algoritme met shift}
@@ -724,6 +727,12 @@
 				\State $R_{(1)} \leq ... \leq R_{(N)} = sort(R_1, ..., R_N)$
 				\State $D^+ = \max_{1 \leq i \leq N}\{\frac{i}{N} - R_{(i)}\}$
 				\State $D^- = \max_{1 \leq i \leq N}\{R_{(i)} - \frac{i-1}{N}\}$
+				\State $D = max(D^+, D^-)$
+				\If{$D > D_{\alpha}$}
+					\State reject $H_0$
+				\Else
+					\State accept $H_0$
+				\EndIf				
 			\EndProcedure
 		\end{algorithmic}
 	\end{algorithm}
@@ -731,7 +740,90 @@
 	
 	\subsubsection{Autocorrelatietest}
 	
+	Een autocorrelatietest vindt het onderling verband in een rij getallen.
 	
+	\todo{Gekke wiskunde}
+	
+	\subsection{Toevalsgeneratoren voor discrete verdelingen}
+	
+	\begin{mydef}
+		Stel dat $X$ een discrete willekeurige variabele is met cdf $F$. De inverse distributiefunctie (idf) van $X$ is dan
+		$$
+			F^*:[0,1] \rightarrow \chi : u \mapsto F^*(u) = \min_x\{x:u<F(x)\}
+		$$
+	\end{mydef}
+
+	Als $U$ een uniform verdeelde willekeurige variabele is en $F^*(x)$ de idf van $F(x)$, dan is een willekeurige variabele $Z=F^*(U)$ verdeeld volgens $F$
+	
+	\subsection{Toevalsgeneratoren voor continue verdelingen}
+	
+	\begin{mydef}
+		Stel dat $X$ een continue willekeurige variabele is met cdf $F$. De inverse distributiefunctie (idf) van $X$ is dan
+		$$
+		F^{-1}:[0,1] \rightarrow \chi : u \mapsto F^{-1}(u) = \min_x\{x:u<F(x)\}
+		$$
+	\end{mydef}
+
+	Het is niet altijd eenvoudig om een uitdrukking voor $F^{-1}$ op te stellen. Daarom zijn er enkele methodes.
+	
+	\subsubsection{Transformatiemethode}
+	
+	Als $U$ een uniform verdeelde willekeurige variabele is en $F^{-1}(x)$ de idf van $F(x)$, dan is een willekeurige variabele $Z=F^{-1}(U)$ verdeeld volgens $F$
+	
+	\subsubsection{Box-Muller-algoritme}
+	
+	Het Box-Muller-algoritme wordt gebruikt om getallen volgens $N(0,1)$ te genereren.
+	
+	\begin{algorithm}[!ht]
+		\caption{Box-Muller-algoritme}
+		\begin{algorithmic}[1]
+			\Procedure{BoxMullerNormal}{}
+				\State $U_ 1, U_2 \sim U(0,1)$ random
+				\State $Z_1 = \sqrt{-2 \log(U_1)} \cos(2 \pi U_2)$
+				\State $Z_2 = \sqrt{-2 \log(U_1)} \sin(2 \pi U_2)$
+			\EndProcedure
+		\end{algorithmic}
+	\end{algorithm}
+	
+	$Z_1$ en $Z_2$ zijn onafhankelijke willekeurige variabelen verdeeld volgens $N(0,1)$
+	
+	
+	\subsubsection{Som van Twaalf}
+	
+	Het Box-Muller-algoritme wordt gebruikt om getallen volgens $N(0,1)$ te genereren.
+	
+	\begin{algorithm}[!ht]
+		\caption{Som van twaalf}
+		\begin{algorithmic}[1]
+			\Procedure{SumOf12Normal}{}
+				\State $U_i \sim U(0,1)$ for $i=1,2,...,12$
+				\State $Z = \sum_{12}^{i=1}U_i - 6$
+			\EndProcedure
+		\end{algorithmic}
+	\end{algorithm}
+
+	$Z$ is bij benadering verdeeld volgens $N(0,1)$
+	
+	\subsubsection{Acceptance-rejection methode}
+	
+	De accpetance-rejection methode kan gebruikt worden om getallen volgens een willekeurige verdelingsfunctie $p(x)$ te genereren, gegeven een andere verdelingsfunctie $q(x)$ waar een generator voor bestaat.\\
+	
+	In de praktijk wordt voor $q(x)$ vaak $U(0,1)$ genomen.
+	
+	\begin{algorithm}[!ht]
+		\caption{Acceptance-rejection methode}
+		\begin{algorithmic}[1]
+			\Procedure{AcceptRejectRandom}{}
+				\State $Y \sim q(x)$ random
+				\State $\hat{x} \in \text{dom}(p(x))$
+				\If{$ 0< Y  < p(\hat{x})/q(\hat{x}) $}
+					\State \textbf{accept}
+				\ElsIf{$ p(\hat{x})/q(\hat{x}) < Y < 1$}
+					\State \textbf{reject}
+				\EndIf
+			\EndProcedure
+		\end{algorithmic}
+	\end{algorithm}
 	
 	
 \end{document}
