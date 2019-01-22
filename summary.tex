@@ -6,6 +6,7 @@
 \usepackage[noend]{algpseudocode}
 \usepackage{bbold}
 \usepackage{todonotes}
+\usepackage{systeme}
 
 \title{Samenvatting [G0Q57A] - Modellering en simulatie}
 \author{Arne Van Den Kerchove}
@@ -472,17 +473,44 @@
 		h^{(k)} = -[\nabla^2f(x^{(k)})]^{-1} \nabla f(x^{(k)})
 	$$
 	
-	\textbf{Convergentie:} Kwadratisch indien Hessiaan singulier en startwaarde in attractiegebied van minimum.
-	
-	\todo{waarom beter dan methode van de steilste afdaling}
+	\textbf{Convergentie:} Kwadratisch indien Hessiaan niet-singulier in het attractiepunt en startwaarde in attractiegebied van minimum.
 	
 	\subsection{Optimalisatieproblemen met beperkingen}
 	
-	\subsubsection{Gelijkheidsbeperkingen}
+	\subsubsection{Gelijkheidsbeperkingen}	
+	Voor \textbf{één gelijkheidsbeperking} geldt de eigenschap dat als $x^*$ een lokale minimizer is en $\nabla g(x^*) \neq 0$ er een $\lambda \in \mathbb{R}$ bestaat zo dat $-\nabla f(x^*) = \lambda \nabla g(x^*)$\\
 	
-	Het probleem is dat de gradiënt van doelfunctie $f(x)$ en beperking $g(x)$ niet in dezelfde richting liggen.\\
+	Hiermee kunnen kandidaat minima gevonden worden door het volgende stelsel op te lossen met de methode van Newton-Raphson:
+	\begin{equation*}
+		\left\{
+			\begin{array}{rr}
+				\nabla f(x) + \lambda \nabla g() = 0\\
+				g(x) = 0
+			\end{array}
+		\right.
+	\end{equation*}
+		
+	Voor \textbf{meerdere gelijkheidsbeperkingen} geldt de eigenschap dat als $x^*$ een lokale minimizer is en de vectoren
+	$$
+		{\nabla g_1(x^*), ... \nabla g_p(x^*)}
+	$$
+	zijn lineiair onafhankelijk, dan bestaan er $\lambda_1, ... , \lambda_p \in \mathbb{R}$ zo dat
+	$$
+		-\nabla f(x^*) = \sum_{i=1}^{p} \lambda_i \nabla g_i(x^*)
+	$$
 	
-	\todo{TODO}
+	Hiermee kunnen kandidaat minima gevonden worden door het volgende stelsel op te lossen met de methode van Newton-Raphson:
+	$$	
+		\left\{
+			\begin{array}{rr}
+				\nabla f(x) + \sum_{i=1}^{p} \lambda_i \nabla g_i(x) = 0\\
+				g_1(x) = 0\\
+				...\\
+				g_p(x) = 0
+			\end{array}
+		\right.
+	$$
+
 	
 	\subsubsection{Ongelijkheidsbeperkingen}
 	
@@ -501,10 +529,10 @@
 	
 	\subsection{Discrete Fourier-transformatie}
 	
-	\subsubsection{Discrete Fourier-transformatie en inverse discrete Fourier-transformatie}
+	\subsubsection{DFT en IDFT}
 	
 	\begin{mydef}
-		Voor een eindige rij $\{x_n\}_{n=0}^{N-1}$ met $N$ willekeurige getallen wordt de discrete Fourier-transformatie gegeven door
+		Voor een eindige rij $\{x_n\}_{n=0}^{N-1}$ met $N$ willekeurige getallen wordt de discrete Fourier-transformatie (DFT) gegeven door
 		$$
 			X_k = \sum_{n=0}^{N-1} x_n W_N^{kn}  
 		$$
@@ -515,7 +543,7 @@
 	\end{mydef}
 
 	\begin{mydef}
-		Voor een eindige rij $\{X_k\}_{k=0}^{N-1}$ met $N$ willekeurige getallen wordt de inverse discrete Fourier-transformatie gegeven door
+		Voor een eindige rij $\{X_k\}_{k=0}^{N-1}$ met $N$ willekeurige getallen wordt de inverse discrete Fourier-transformatie (IDFT) gegeven door
 		$$
 		x_n = \sum_{k=0}^{N-1} X_k W_N^{-kn}  
 		$$
@@ -524,6 +552,53 @@
 		W_N = e^{2\pi i/N}
 		$$
 	\end{mydef}
+
+	Uit de eigenschap dat $W_N^{k+N} = W_N^k$ volgt dat er slechts $N$ verschillende $W_N^{kn}$ en $W_N^{-kn}$ zijn. 
+	
+	\textbf{Complexiteit van directe berekening:} $\mathcal{O}(N^2)$
+
+	\subsubsection{Daniel-Lanczos splitsingsalgoritme}
+	
+	Vanwege de eigenschappen $W_N^{N/2}+k = -W_N^k$, $X_{N/2+k}^{even} = X_k^{even}$ en $X_{N/2+k}^{odd} = X_k^{odd}$ geldt dat
+	$$
+		X_k = X_k^{even} + W_N^k X_k^{odd}
+	$$
+	
+	\begin{algorithm}[!ht]
+		\caption{Daniel-Lanczos Splitsingsalgoritme}
+		\begin{algorithmic}[1]
+			\Procedure{DFTSplit}{}
+				\State $\{X_k^{even}\}_{k=0}^{N/2-1} = \{\sum_{n=0}^{N/2-1} x_{2n}W_{N/2}^k\}_{k=0}^{N/2-1}$
+				\State $\{X_k^{even}\}_{k=0}^{N/2-1} = \{\sum_{n=0}^{N/2-1} x_{2n}W_{N/2}^k\}_{k=0}^{N/2-1}$
+				\State $\{X_k\}_{k=0}^N = \{X_{k/2}^{even} + W_N^k + X_{k/2}^{odd}\}_{k=0}^N$
+			\EndProcedure
+		\end{algorithmic}
+	\end{algorithm}
+
+	\textbf{Complexiteit:} $\mathcal{O}(N^2/2)$
+
+	\subsubsection{De snelle Fourier-transformatie}
+	
+	Met de combinatiestap van het Daniel-Lanczos-splitsingsalgoritme kunnen we een recursief algoritme opstellen
+	
+	\begin{algorithm}[!ht]
+	
+		
+		\caption{Snelle Fourier-transformatie}
+		\begin{algorithmic}[1]
+			\Procedure{FFT}{}
+			\If{$N=1$}
+				\State $X_k=x_k$ 
+			\Else
+				\State reorder $\{x_k\}$
+				\State $\{X_k\} = \{FFT(x_{k/2}^{even}) + W_N^k + FFT(x_{k/2}^{odd})\}$
+			\EndIf
+			\EndProcedure
+		\end{algorithmic}
+	\end{algorithm}
+
+	\textbf{Complexiteit:} $\mathcal{O}(Nlog_2(N))$
+	
 	
 	\subsection{Symmetrische discrete Fourier-transformaties}
 	
