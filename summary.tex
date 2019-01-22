@@ -31,6 +31,7 @@
 	\todo{Dit hoofdstuk als er tijd over is}
 	
 	\section{Numerieke lineaire algebra en toepassingen}
+	
 	\subsection{QR-factorisatie}
 	
 	
@@ -403,7 +404,7 @@
 	
 	\section{Optimalisatie}
 	
-		\begin{mydef}
+	\begin{mydef}
 		De gradiënt van een functie $f: \mathbb{R}^n \to \mathbb{R}$ wordt gedefinieerd als
 		$$
 		\mathcal{r} f(x) :=
@@ -698,6 +699,37 @@
 		\item Voor $m=2^b$, $c=0$ is de maximale periode $P=m/4=2^b-2$, die kan bereikt worden wanneer $X_0$ oneven is en als $a=3+8k$ of $a=5+8k$.
 		\item Als $m$ een priemgetal en $c=0$ is de maximale periode $P=m-1$, die kan bereikt worden als $a$ de eigenschap heeft dat de kleinste $k$ waarvoor geldt dat $a^k-1$ deelbaar is door $m$ gelijk is aan $m-1$
 	\end{itemize}
+	
+	\subsection{Testen voor toevalsgeneratoren}
+	
+	\subsubsection{Chi-kwadraattest}
+	
+	De chi-kwadraattest is een frequentietest om na te gaan of de gegenereerde getallen voldoen aan de uniforme verdeling.\\
+	
+	De chi-kwadraattest maakt gebruik van de toetsingsgrootheid
+	$$
+		\chi_{n-1}^2 = \sum_{i=1}^{n} \frac{(O_i - E_i)^2}{E_i}
+	$$
+	met $O_i$ het aantal observaties in klasse $i$, $E_i$ het verwachte aantal punten in klasse $i$ en $n$ het aantal klassen.
+	
+	
+	\subsubsection{Kolmogorov-Smirnov-test}
+	
+	De Kolmogorov-Smirnov-test is een frequentietest om na te gaan of de gegenereerde getallen voldoen aan de uniforme verdeling.\\
+	
+	\begin{algorithm}[!ht]
+		\caption{Kolmogorov-Smirnovtest}
+		\begin{algorithmic}[1]
+			\Procedure{DFTSplit}{KSTest}
+				\State $R_{(1)} \leq ... \leq R_{(N)} = sort(R_1, ..., R_N)$
+				\State $D^+ = \max_{1 \leq i \leq N}\{\frac{i}{N} - R_{(i)}\}$
+				\State $D^- = \max_{1 \leq i \leq N}\{R_{(i)} - \frac{i-1}{N}\}$
+			\EndProcedure
+		\end{algorithmic}
+	\end{algorithm}
+	
+	
+	\subsubsection{Autocorrelatietest}
 	
 	
 	
