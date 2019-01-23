@@ -830,6 +830,7 @@
 	
 	
 	\section{Discrete eventsimulaties}
+
 	
 	\subsection{Discrete eventsystemen}
 	
@@ -864,6 +865,7 @@
 		\item $N$ de capaciteit van de wachtrij
 		\item $K$ de grootte van de klantenpopulatie
 	\end{itemize}
+	Voor de verdelingen $A$ en $B$ wordt vaak $M$ gebruikt (memoryless of Markoviaans) om de exponentiële verdeling aan te duiden.\\
 
 	Volgens de bovenstaande verdelingen kan er een groot aantal aankomsten van klanten en bedieningstijden gegenereerd worden. Hiermee kan dan een bedieningstabel opgesteld worden die volgens de wet van de grote getallen representatief zal zijn voor het wachtrijsysteem.
 
@@ -907,5 +909,198 @@
 	\end{itemize}
 
 	Het is mogelijk dat er een stochastische wachttijd is voor een levering.
+	
+	\section{Markovketens}
+	
+	\subsection{Geboorte-overlijdensprocessen}
+	
+	\subsubsection{Exponentiële stochastische variabelen}
+	
+	\begin{mydef}
+		Een stochastische variabele $T$ is exponentieel verdeeld volgens $E(\mu)$ als
+		\begin{itemize}
+			\item $\mu >0$
+			\item $\mathcal{T} = \{t\ |\ t > 0\}$
+			\item de wdf van $T$ gelijk is aan
+				$$
+					f(t) = \frac{1}{\mu}e^{-t/\mu}
+				$$
+				voor $t>0$
+			\item de cdf van $T$ gelijk is aan
+				$$
+					F(t) =  1-e^{-t/\mu}
+				$$
+				voor $t>0$
+			\item de idf van $T$ gelijk is aan 
+				$$
+					F^{-1}(u) = -\mu \ln(1-u)
+				$$
+				voor $0<u<1$
+			\item de verwachtingswaarde en de standaardafwijking van $T$ zijn beide $\mu$				
+		\end{itemize}
+	\end{mydef}
+
+	Als $T$ verdeeld is volgens $E(\mu)$ dan is $T$ geheugenloos of \textit{Markoviaans}:
+	$$
+		P(T>t+\tau\ |\ T >\tau) = P(T>t) = e^{-t/\mu}
+	$$
+	Het toekomstige stochastische gedrag van $T$ wordt volledig bepaald door zijn huidige toestand, niet door zijn geschiedenis.\\
+	
+	Als $T_1, T2...,T_n$ verdeeld zijn volgens $E(\mu_i)$ met bijhorende $i$, dan is
+	$$
+		T = \min\{T_1, T_2...,T_n\} \sim E(\mu)
+	$$
+	met
+	$$
+		\frac{1}{\mu} = \frac{1}{\mu_1} + \frac{1}{\mu_2} + ... + \frac{1}{\mu_n}
+	$$
+	en
+	$$
+		P(T=T_i) = \frac{\mu}{\mu_i}
+	$$
+	voor $i=1,2,...n$
+	\\
+	
+	Al deze eigenschappen en definities kunnen ook uitgedrukt worden in frequentie $\lambda = \frac{1}{\mu}$
+	
+	\subsubsection{Continue geboorte-overlijdensprocessen}
+	
+	\begin{mydef}
+		Als $X$ een discrete willekeurige variabele geïndexeerd met de tijd $t$ volgens $X(t)$, met de volgende evolutie in de tijd:
+		\begin{itemize}
+			\item Als $x$ de toestand van $X$ op tijdstip $t$ is, zal $X$ in die toestand blijven voor een willekeurige tijd verdeeld volgens $E(\mu(x))$.
+			\item Als een toestandsovergang plaatsvindt, zal $X$, onafhankelijk van de tijd doorgebracht in toestand $x$, verschuiven naar toestand $x+1$ (geboorte) met kans $p(x)$ of toestand $x-1$ (overlijden) met kans $p(x)-1$.
+		\end{itemize}
+		Dit stochastische proces is een continu geboorte-overlijdensproces.
+	\end{mydef}
+
+	Een geboorte-overlijdensproces wordt volledig gekarakteriseerd door de begintoestand $X(0)$ en de functies $\mu(x)$ en $p(x)$. Deze processen zijn geheugenloos.\\
+	
+	Via de frequentiefunctie
+	$$
+		\lambda(x) = \frac{1}{\mu(x)}
+	$$
+	kunnen de geboortefrequentie $b(x)$ en overlijdensfrequentie $d(x)$ uitgedrukt worden als
+	$$
+		b(x) = \lambda(x)p(x) \text{\ \ \ \ \ en\ \ \ \ } d(x) = \lambda(x)(1-p(x))
+	$$
+	\\
+	Een $M/M/1/\infty/\infty$ wachtrijsysteem definieert een continu geboorte-overlijdensproces.
+	
+	\subsubsection{Stabiele toestandskarakterisatie}
+	
+	\begin{mydef}
+		Als $f(x, t) = P(X(t) = x)$ voor een continu geboorte-overlijdensproces $X(t)$, dan wordt de stabiele toestands-pdf gegeven door
+		$$
+			f(x) = \lim_{t \rightarrow \infty}f(x,t)
+		$$
+
+	\end{mydef}
+	
+		In een stabiele toestand $x$ is de toestroomfrequentie naar $x$ even groot als de uitstroomfrequentie uit $x$.
+	
+	
+	\subsubsection{Discrete geboorte-overlijdensprocessen}
+	
+	\begin{mydef}
+		Als $X$ een discrete willekeurige variabele geïndexeerd met de tijd $t$ volgens $X(t)$, met de volgende evolutie in de tijd:
+		\begin{itemize}
+			\item Toestandsovergangen kunnen enkel plaatsvinden op een tijdstip $t \in \{1, 2, 3, ...\}$			
+			\item Als een toestandsovergang kan plaatsvinden, zal $X$, onafhankelijk van de tijd doorgebracht in toestand $x$, verschuiven naar toestand $x+1$ (geboorte) met kans $b(x)$ of toestand $x-1$ (overlijden) met kans $d(x)-1$ of in toestand $x$ blijven met kans $c(x) = 1-b(x)-d(x)$.
+		\end{itemize}
+		Dit stochastische proces is een continu geboorte-overlijdensproces.
+	\end{mydef}
+
+
+	De duur waarvoor $X$ in een toestand $x$ blijft is verdeeld volgens de geheugenloze geometrische verdeling $Geom(\mu(x))$ met $\mu(x) = \frac{1}{b(x) + c(x)}$
+	
+	\subsection{Eindige toestands-Markovketens}
+	
+	Geboorte-overlijdensprocessen zijn speciale gevallen van Markovketens waarin enkel toestandsovergangen naar aangrenzende toestanden zijn toegelaten. Bij algemene Markovketens zijn er overgangen toegelaten naar alle toestanden.
+	
+	\subsubsection{Discrete eindige toestands-Markovketens}
+	
+	\begin{mydef}
+		Als $X$ een discrete willekeurige variabele geïndexeerd met de tijd $t$ volgens $X(t)$ met domein $\mathcal{X}$, met de volgende evolutie in de tijd:
+		\begin{itemize}
+			\item Toestandsovergangen kunnen enkel plaatsvinden op een tijdstip $t \in \{1, 2, 3, ...\}$			
+			\item Op deze op deze overgangen kan $X(t)$ verschuiven van toestand $x$ naar toestand $x'$ met kans $p(x,x') \geq 0$
+		\end{itemize}
+		Als $|\mathcal{X}| < \infty$ is het stochastisch proces gedefinieerd door $X(t)$ een discrete eindige toestands-Markovketen
+	\end{mydef}
+
+	Een discrete einidge toestands-Markovketen wordt volledig gekarakteriseerd door de begintoestand $X(0)$ en de kansfunctie $p(x,x')$. \\
+	
+	$p$ kan weergegeven worden als een probabilistische overgangsmatrix of als een grafe met toestanden als nodes en kansen op de edges.\\
+	
+	Als $p$ de overgangsmatrix is, is $P$ de cumulatieve overgangsmatrix met per rij de cdf van een toestand. Deze kan bekomen worden door de rijen van $p$ cumulatief op te tellen. Het volgende algoritme genereert volgens deze cdf een pad door een discrete eindige toestands-Markovketen.
+	
+	\begin{algorithm}[!ht]
+		\caption{Willekeurig pad door discrete Markovketen}
+		\begin{algorithmic}[1]
+			\Procedure{DiscreteMarkovRandomPath}{}
+				\State $x_0 = X(0)$
+				\For{$k=0,1,...$}
+					\State $u \in [0,1]$ random		
+					\State $x' = 0$				
+					\While{$P_{x_k,x'} \leq u}$
+						\State $x'=x+1$
+					\EndWhile
+					\State $x_{k+1} = x'$
+				\EndFor
+			\EndProcedure
+		\end{algorithmic}
+	\end{algorithm}
+	
+	\subsubsection{Stabiele toestanden}
+	
+	Een mogelijke methode is om de opéénvolgende machten van $p$ te bepalen. Het volgt uit de Chapman-Kolmogorov-vergelijking dat
+	$$
+		p^{\infty} = \lim_{t\rightarrow\infty} = p^t
+	$$
+	
+	\textbf{Complexiteit}: $\mathcal{O}(tk^3)$\\
+	\\
+	Een andere methode is het berekenen van een linker-eigenvector van matrix $p$ bij de eigenwaarde 1. Indien alle waarden in deze eigenvecor niet negatief zijn, is de genormaliseerde eigenvector een stabiele toestands-pdf voor $X(t)$.\\
+	
+	Er bestaat een stabiele stat als de Markovketen irreduceerbaar en aperiodisch is, dan heeft de Markovketen exact één stabiele toestands-pdf vector.
+	
+	\subsubsection{Continue eindige toestands Markovketens}
+	
+	\begin{mydef}
+		\begin{mydef}
+			Als $X$ een discrete willekeurige variabele geïndexeerd met de tijd $t$ volgens $X(t)$, met de volgende evolutie in de tijd:
+			\begin{itemize}
+				\item Als $x$ de toestand van $X$ op tijdstip $t$ is, zal $X$ in die toestand blijven voor een willekeurige tijd verdeeld volgens $E(\mu(x))$.
+				\item Op deze op deze overgangen kan $X(t)$ verschuiven van toestand $x$ naar toestand $x'$ met kans $p(x,x') \geq 0$
+			\end{itemize}
+			Dit stochastische proces is een continu geboorte-overlijdensproces.
+		\end{mydef}
+	\end{mydef}
+
+	Een continue einidge toestands-Markovketen wordt volledig gekarakteriseerd door de begintoestand $X(0)$, de vewachtte tijd-in-toestandfunctie $\mu(x)$ en de kansfunctie $p(x,x')$. \
+	
+	Als $p$ de overgangsmatrix is, is $P$ de cumulatieve overgangsmatrix met per rij de cdf van een toestand. Deze kan bekomen worden door de rijen van $p$ cumulatief op te tellen. Het volgende algoritme genereert volgens deze cdf een pad door een discrete eindige toestands-Markovketen.
+	
+	\begin{algorithm}[!ht]
+		\caption{Willekeurig pad door continue Markovketen}
+		\begin{algorithmic}[1]
+			\Procedure{ContinuousMarkovRandomPath}{}
+				\State $t=0$
+				\State $x(t) = X(0)$
+				\While{True}
+					\State $\Delta t \sim E(\mu(x(t)))$ random
+					\State $t= t+\Delta t$
+					\State $u \in [0,1]$ random		
+					\State $x' = 0$				
+					\While{$P_{x_k,x'} \leq u}$
+						\State $x'=x+1$
+					\EndWhile
+				\State $x(t) = x'$
+				\EndWhile
+			\EndProcedure
+		\end{algorithmic}
+	\end{algorithm}
+
 
 \end{document}
