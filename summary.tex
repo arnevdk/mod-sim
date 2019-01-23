@@ -35,6 +35,8 @@
 	
 	\todo{Dit hoofdstuk als er tijd over is}
 	
+	
+	
 	\section{Numerieke lineaire algebra en toepassingen}
 	
 	\subsection{QR-factorisatie}
@@ -673,6 +675,7 @@
 	\todo{Deze sectie als er tijd over is}
 	
 	\section{Toevalsgeneratoren}
+
 	
 	\subsection{Genereren van willekeurige getallen}
 	
@@ -826,4 +829,83 @@
 	\end{algorithm}
 	
 	
+	\section{Discrete eventsimulaties}
+	
+	\subsection{Discrete eventsystemen}
+	
+	Een \textit{lijst} is een verzameling entiteiten met een ordening. Een \textit{event notice} is een aankondiging dat een \textit{event} op een bepaald moment zal plaastvinden of plaats heeft gevonden. Een \textit{event list} is een lijst van \textit{event notices}.\\
+
+	Vertragingen komen overeen met \textit{conditional wait}.\\
+	Activiteiten komen overeen met \textit{unconditional wait}.
+	
+	\begin{mydef}
+		Een discrete eventsimulatie is een modellering over een bepaalde tijdspanne van een systeem waarvan de status wijzigt op discrete ogenblikken in de tijdn namelijk op die ogenblikken waarop gebeurtenissen plaatsvinden.
+	\end{mydef}
+	
+	\subsection{Wachtrijen}
+	
+	\subsubsection{Algemene wachtrijsimulatie}
+	
+	De simulatie van een wachtrij verloopt volgens de volgende stappen:
+	
+	\begin{enumerate}
+		\item Bepaal de karakteristieken van de invoer (bv. waarschijnlijkheidsverdeling).
+		\item Stel een simulatietabel op en initializeer de eerste rij.
+		\item Genereer de invoer voor elke iteratie en evalueer de uitvoerfunctie voor elke iteratie
+	\end{enumerate}
+
+	De \textit{systeemstatus} is gelijk aan het aantal klanten in de wachtrij. Een \textit{gebeurtenis} is een plotse wijziging in de systeemstatus. \\
+	
+	Voor wachtrijsystemen wordt het algemene notatiesysteem $A/B/c/N/K$ gebruikt, met
+	\begin{itemize}
+		\item $A$ de verdeling van de aankomsten
+		\item $B$ de verdeling van de bedieningstijd
+		\item $c$ het aantal servers/kanalen
+		\item $N$ de capaciteit van de wachtrij
+		\item $K$ de grootte van de klantenpopulatie
+	\end{itemize}
+
+	Volgens de bovenstaande verdelingen kan er een groot aantal aankomsten van klanten en bedieningstijden gegenereerd worden. Hiermee kan dan een bedieningstabel opgesteld worden die volgens de wet van de grote getallen representatief zal zijn voor het wachtrijsysteem.
+
+	\subsubsection{Single-server-wachtrijen}
+	\begin{table}[!ht]
+	\makebox[\linewidth]{
+
+
+		\begin{tabular}{|p{.1\textwidth}|p{.125\textwidth}p{.125\textwidth}p{.125\textwidth}p{.125\textwidth}p{.125\textwidth}p{.125\textwidth}p{.125\textwidth}p{.125\textwidth}|}
+			\hline
+			Klant & Tijd tussen aankomsten & Aankomst- tijd & Dienstduur & Begintijd dienst & Wachtduur in rij & Eindtijd- stip dienst & Duur klant in systeem & Inactieve tijd van server \\ \hline
+			1     &                        &                &            &                  &                  &                       &                       &                           \\
+			2     &                        &                &            &                  &                  &                       &                       &                           \\
+			...   &                        &                &            &                  &                  &                       &                       &                           \\
+			n     &                        &                &            &                  &                  &                       &                       &                           \\ \hline
+		\end{tabular}
+
+	}
+	
+		\end{table}
+	
+	De bovenstaande tabel geeft een voorbeeld van een simulatietabel voor een single-channel wachtrij.
+	
+	\subsubsection{Multi-server-wachtrijen}
+	
+	Dit werkt gelijkaardig aan het bovenstaande principe. Als een server vrij is, wordt de volgende klant onmiddelijk geholpen door de vrije server.\\
+	
+	Indien alle servers bezet zijn, wordt de tijd waarop de eerste server vrij komt berekend door het minimum van de huidige eindtijden van de services te nemen.
+	
+
+	
+	\subsection{Inventarissystemen}
+	
+	De inventaris wordt opgemaakt in periodes van lengte $N$. De maximale voorraad wordt gegeven door $M$. Een te grote voorraad brengt kosten met zich mee. Een negatieve voorraad komt overeen met bestellingen van klanten en is ook te vermijden.\\
+	
+	Mogelijke gebeurtenissen zijn
+	\begin{itemize}
+		\item een vraag naar een item in voorraad.
+		\item het opstellen van een inventaris.
+		\item het ontvangen van een levering.
+	\end{itemize}
+
+	Het is mogelijk dat er een stochastische wachttijd is voor een levering.
+
 \end{document}
