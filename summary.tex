@@ -1102,5 +1102,52 @@
 		\end{algorithmic}
 	\end{algorithm}
 
+	\section{Monte Carlo-simulaties}
+	
+	\subsection{Monte Carlo-integratie}
+	
+	Stel een wdf $p(x)$ die voldoet aan 
+	$$
+		p(x) \geq 0, \forall x \in \mathbb{R}
+		\text{\ \ \ \ \ en \ \ \ \ \ }
+		\int_{-\infty}^{\infty}p(x)dx=1
+	$$
+	Beschouw een integraal
+	$$
+		I = \int_{-\infty}^{\infty}f(x)p(x)
+	$$
+	Neem een steekproef van $x_i$ waarden van grootte $N$. Volgens de wet van de grote getallen kan e integraal $I$ benaderd worden door
+	$$
+		I \approx \frac{1}{N}\sum_{i=1}^{N}f(x_i)
+	$$
+	Met behulp van de centrale limietstelling kan de fout worden berekend.
+	
+	\subsection{Variantiereductie}
+	
+	Bij Monte Carlo-integratie stijgt de fout $\epsilon$ evenredig met $\mathcal{O}(\sigma N^{-1/2})$. De steekproefgrootte moet dus snel stijgen om een kleine verbetering van de fout te bekomen. Om dit probleem op te lossen kan de variantie van de integrand verkleind worden.
+	
+	\subsubsection{Stratified sampling}
+	
+	Stratificatie splitst het interval $\Omega$ op in $M$ deelintervallen $\Omega_i$ van gelijke grootte. Er worden dan $N/M$ punten gegenereerd per deelinterval om een meer even spreiding te bekomen.
+	$$
+		I =\int_{0}^{1}f(x)dx =  \sum_{k=1}^{M}\int_{\Omega_k}f(x)dx = \sum_{k=1}^{M}\int_{\Omega_k}\frac{f(x)}{M}Mdx
+	$$
+	
+	De variantie na stratificatie is kleiner da de variantie van de secundaire schatter.
+	
+	\subsubsection{Importance sampling}
+	
+	Conceptueel willen we meer steekproeven nemen daar waar het belangrijker is. De wdf $p(x)$ waaruit de punten gegenereerd worden volgt de functie $f(x)$.
+	$$
+		I = \int_{0}^{1}f(x)dx = \int_{0}^{1}\frac{f(x)}{p(x)}p(x)dx
+	$$
+	De variantie met importance sampling is kleiner da de variantie van de secundaire schatter.
+	
+	\subsubsection{Control variates}
+	
+	
+	
+	\subsection{Dronkemanswandeling}
+	
 
 \end{document}
